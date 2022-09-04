@@ -41,7 +41,7 @@ DNS2="144.144.144.144"
 IPV6_PRIVACY="no"
 NETWORK_CONFIG_FILE="/etc/sysconfig/network-scripts/ifcfg-ens33"
 
-sed -i -e "s/BOOTPROTO='dhcp'/BOOTPROTO='static'/" \
+sed -i -e 's/BOOTPROTO="dhcp"/BOOTPROTO="static"/' \
        -e "/^IPADDR/d" \
        -e "/^GATEWAY/d" \
        -e "/^DOMAIN/d" \
@@ -53,10 +53,20 @@ sed -i -e "s/BOOTPROTO='dhcp'/BOOTPROTO='static'/" \
 echo -e "IPADDR='$IP'\nGATEWAY='$GATEWAY'\nDOMAIN='$DOMAIN'\nNETMASK='$NETMASK'\nDNS1='$DNS1'\nDNS2='$DNS2'\nIPV6_PRIVACY='$IPV6_PRIVACY'" >> $NETWORK_CONFIG_FILE
 systemctl restart network
 
+# change fd-max limit
+if [ -z "$(cat /etc/sysctl.conf | grep 'fs.file-max')" ]; then
+	echo -e "*\thard\tnofile\t1000000\n*\tsoft\tnofile\t1000000" >> /etc/security/limits.conf
+	echo "fs.file-max=1000000" >> /etc/sysctl.conf
+	sysctl -p
+fi
+
+# shutdown firewalld service
+systemctl stop firewalld
+
 echo -e "network configure finished!\n"
 
 while true; do
-	read -p"can you continue to install sofrware? y/n" OFF
+	read -p"can you continue to install sofrware? y/n\n" OFF
 	if [ $OFF == 'y' -o $OFF == 'Y' ]; then
 		break
 	elif [ $OFF == 'n' -o $OFF == 'N' ]; then
