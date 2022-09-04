@@ -150,7 +150,7 @@ if [ ! -f "/root/.pip/pip.conf" ]; then
 fi
 
 # install openssl-devel zlib-devel curl-devel python3
-yum install -y openssl-devel zlib-devel curl-devel
+yum install -y openssl-devel zlib-devel curl-devel autoconf boost-devel
 
 ### create third_party env directory
 THIRD_ENV_DIR="/apps/$USER_NAME"
