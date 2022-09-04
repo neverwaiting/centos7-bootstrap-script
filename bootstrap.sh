@@ -204,8 +204,8 @@ fi
 if [ ! -x "$(command -v gcc)" ]; then
 	yum install -y centos-release-scl
 	yum install -y devtoolset-8
-	scl enable devtoolset-8 bash
-	echo -e "\nscl enable devtoolset-8 bash" >> /etc/profile
+	source /opt/rh/devtoolset-8/enable
+	echo -e "\nsource /opt/rh/devtoolset-8/enable" >> /etc/profile
 fi
 
 ### install cmake
@@ -274,6 +274,9 @@ echo -e "|| install finished! spend $SPEND_TIME_STRING ||"
 echo "================================================"
 echo "================================================"
 echo "================================================"
+
+sleep 1
+echo "installing zsh..."
 
 ### install zsh and oh-my-zsh
 if [ ! -x "$(command -v zsh)" ]; then
