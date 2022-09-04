@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/sh
 
 echo "Welcome to Wintersun's bootstrap!"
 
@@ -123,7 +123,7 @@ if [ ! -f "/root/.pip/pip.conf" ]; then
 	echo "trusted-host=pypi.douban.com" >> /root/.pip/pip.conf
 	mkdir -p /home/$USER_NAME/.pip
 	cp /root/.pip/pip.conf /home/$USER_NAME/.pip 
-	chown -r $USER_NAME:$USER_NAME /home/$USER_NAME/.pip
+	chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.pip
 fi
 
 # install openssl-devel zlib-devel curl-devel python3
@@ -146,9 +146,8 @@ if [ -z "$(sed -n '/^export PATH=/p' /etc/profile)" ]; then
 	source /etc/profile
 else
 	if [ -z "$(sed -n '/^export PATH=/p' /etc/profile | grep "$THIRD_ENV_DIR/bin")" ]; then
-		echo "un update env"
-		# sed -i "s/export PATH=/export PATH=$THIRD_ENV_DIR\/bin:/" /etc/profile
-		# source /etc/profile
+		sed -i "s#export PATH=#export PATH=$THIRD_ENV_DIR/bin:#" /etc/profile
+		source /etc/profile
 	fi
 fi
 
@@ -173,7 +172,7 @@ if [ ! -x "$(command -v nvim)" ]; then
 	cp vimrc/coc-settings.json /root/.config/nvim/
 	cp vimrc/init.vim /home/$USER_NAME/.config/nvim/
 	cp vimrc/coc-settings.json /home/$USER_NAME/.config/nvim/
-	chown -r $USER_NAME:$USER_NAME /home/$USER_NAME/.config
+	chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config
 	rm -rf vimrc
 	pip3 install neovim
 	alias vim='nvim'
@@ -195,12 +194,10 @@ if [ ! -x "$(command -v node)" ]; then
 	echo "coc.nvim:registry=https://registry.npm.taobao.org/" >> /root/.npmrc
 
 	cp /root/.npmrc /home/$USER_NAME/.npmrc
-	chown -r $USER_NAME:$USER_NAME /home/$USER_NAME/*
+	chown $USER_NAME:$USER_NAME /home/$USER_NAME/.npmrc
 
 	npm install yarn -g
 	npm install neovim -g
-
-	echo "node-v16.17.0 install finished!"
 fi
 
 ### install devtoolset-8(gcc g++ gdb valgrind ...)
@@ -209,8 +206,6 @@ if [ ! -x "$(command -v gcc)" ]; then
 	yum install -y devtoolset-8
 	scl enable devtoolset-8 bash
 	echo -e "\nscl enable devtoolset-8 bash" >> /etc/profile
-
-	echo "devtoolset-8(gcc g++ gdb valgrind ...) install finished!"
 fi
 
 ### install cmake
@@ -230,18 +225,23 @@ if [ ! -x "$(command -v ccls)" ]; then
 		cp ccls $THIRD_ENV_DIR/bin/
 		chmod a+x $THIRD_ENV_DIR/bin/ccls
 	else
-		wget -O $TMP_DIR/llvmorg-11.0.0.tar.gz $REAL_GITHUB_URL/llvm/llvm-project/archive/refs/tags/llvmorg-11.0.0.tar.gz
-		tar -zxvf $TMP_DIR/llvmorg-11.0.0.tar.gz -C $TMP_DIR
-		mkdir -p $TMP_DIR/llvm-project-llvmorg-11.0.0/build
-		pushd $TMP_DIR/llvm-project-llvmorg-11.0.0/build
-		cmake -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" \
-					-DCMAKE_BUILD_TYPE=Release \
-					-DCMAKE_INSTALL_PREFIX=$THIRD_ENV_DIR ../llvm
-		make -j$(nproc) && make install
-		popd
+		if [ ! -x "$(command -v clang)" ]; then
+			wget -O $TMP_DIR/llvmorg-11.0.0.tar.gz $REAL_GITHUB_URL/llvm/llvm-project/archive/refs/tags/llvmorg-11.0.0.tar.gz
+			tar -zxvf $TMP_DIR/llvmorg-11.0.0.tar.gz -C $TMP_DIR
+			mkdir -p $TMP_DIR/llvm-project-llvmorg-11.0.0/build
+			pushd $TMP_DIR/llvm-project-llvmorg-11.0.0/build
+			cmake -DLLVM_ENABLE_PROJECTS="clang;libcxx;libcxxabi" \
+						-DCMAKE_BUILD_TYPE=Release \
+						-DCMAKE_INSTALL_PREFIX=$THIRD_ENV_DIR ../llvm
+			make -j$(nproc) && make install
+			popd
+		fi
+
 		pushd $TMP_DIR
-		git clone --depth=1 --recursive $REAL_GITHUB_URL/MaskRay/ccls
+		git clone $REAL_GITHUB_URL/MaskRay/ccls
 		pushd ccls
+		sed -i "s#https://github.com#$REAL_GITHUB_URL#" .gitmodules
+		git submodule update --init
 		cmake -H. -BRelease \
 					-DCMAKE_BUILD_TYPE=Release \
 					-DCMAKE_PREFIX_PATH=$THIRD_ENV_DIR \
@@ -260,4 +260,26 @@ if [ -d "$TMP_DIR" ]; then
 fi
 
 END_TIME=$(date +%s)
-echo "install finished! spend " `expr $END_TIME - $BEGIN_TIME` "s"
+SPEND_TIME=`expr $END_TIME - $BEGIN_TIME`
+if [ $SPEND_TIME -ge 60 ]; then
+	SPEND_TIME_STRING=`expr $SPEND_TIME / 60` "m" `expr $SPEND_TIME % 60` "s"
+else
+	SPEND_TIME_STRING="$SPEND_TIME s"
+fi
+
+echo "================================================"
+echo "================================================"
+echo "================================================"
+echo -e "|| install finished! spend $SPEND_TIME_STRING ||" 
+echo "================================================"
+echo "================================================"
+echo "================================================"
+
+### install zsh and oh-my-zsh
+if [ ! -x "$(command -v zsh)" ]; then
+	yum install -y zsh && chsh -s /bin/zsh
+	sh -c "$(curl -fsSL https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh \
+				| sed 's|^REPO=.*|REPO=${REPO:-mirrors/oh-my-zsh}|g' \
+				| sed 's|^REMOTE=.*|REMOTE=${REMOTE:-https://gitee.com/${REPO}.git}|g')"
+fi
+
