@@ -53,6 +53,19 @@ sed -i -e "s/BOOTPROTO='dhcp'/BOOTPROTO='static'/" \
 echo -e "IPADDR='$IP'\nGATEWAY='$GATEWAY'\nDOMAIN='$DOMAIN'\nNETMASK='$NETMASK'\nDNS1='$DNS1'\nDNS2='$DNS2'\nIPV6_PRIVACY='$IPV6_PRIVACY'" >> $NETWORK_CONFIG_FILE
 systemctl restart network
 
+echo -e "network configure finished!\n"
+
+while true; do
+	read -p"can you continue to install sofrware? y/n" OFF
+	if [ $OFF == 'y' -o $OFF == 'Y' ]; then
+		break
+	elif [ $OFF == 'n' -o $OFF == 'N' ]; then
+		exit 1
+	else
+		echo "please input y or n!"
+	fi
+done
+
 # function detect_exec_and_install
 # purpose: yum install program
 # arg1: detect_exec_name
