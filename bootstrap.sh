@@ -225,7 +225,7 @@ fi
 ### install ccls
 if [ ! -x "$(command -v ccls)" ]; then
 	if [ -f "/etc/centos-release" -a \
-		"$(cat /etc/centos-release)" != "CentOS Linux release 7.9.2009 (Core)" ]; then
+		"$(cat /etc/centos-release)" == "CentOS Linux release 7.9.2009 (Core)" ]; then
 
 		cp ccls $THIRD_ENV_DIR/bin/
 		chmod a+x $THIRD_ENV_DIR/bin/ccls
