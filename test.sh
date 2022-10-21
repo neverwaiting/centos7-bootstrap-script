@@ -68,7 +68,7 @@ set_static_ip_address()
 
   IP="192.168.235.10"
   [ -z "$address" ] || IP="$address"
-  GATEWAY="192.168.235.1"
+  GATEWAY="192.168.235.2"
   NETMASK="255.255.255.0"
   DNS1="8.8.8.8"
   DNS2="144.144.144.144"
