@@ -51,10 +51,11 @@ detect_exec_and_install()
 # create a user
 create_user()
 {
-  [ ! -d /home/$name ] || return
   [ -x /bin/zsh ] || yum install -y zsh
-  useradd -m -g wheel -s /bin/zsh "$name" > /dev/null 2>$1
-  echo "$name:$password" | chpasswd
+  if [ ! -d "/home/$name" ]; then
+    useradd -m -g wheel -s /bin/zsh "$name" > /dev/null 2>$1
+    echo "$name:$password" | chpasswd
+  fi
   echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/temp
   chsh -s /bin/zsh "$name" > /dev/null 2>$1
 }
