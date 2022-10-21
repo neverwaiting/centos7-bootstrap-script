@@ -242,7 +242,7 @@ detect_exec_and_install ctags
 # comment to disable github proxy
 PROXY_GITHUB_URL="https://github.91chi.fun/https://github.com"
 GITHUB_URL="https://github.com"
--z "$PROXY_GITHUB_URL" || GITHUB="$PROXY_GITHUB_URL"
+[ -z "$PROXY_GITHUB_URL" ] || GITHUB="$PROXY_GITHUB_URL"
 
 create_user || error_exit "create user"
 
