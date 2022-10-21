@@ -223,10 +223,14 @@ zsh_install()
 {
   USER_HOME="/home/$name"
   MIRROR_RAW_GITHUB_URL="https://github.91chi.fun/https://raw.github.com"
-  sudo -u "$name" curl -fsL "$MIRROR_RAW_GITHUB_URL/ohmyzsh/ohmyzsh/master/tools/install.sh" | \
-  sed 's/https:\/\/github.com/https:\/\/github.91chi.fun\/https:\/\/github.com/g' > "$USER_HOME/omzinstall.sh"
-  sudo -u "$name" sh "$USER_HOME/omzinstall.sh" --unattended && \
-  sudo -u "$name" git clone --depth=1 "$GITHUB_URL/romkatv/powerlevel10k.git" "$USER_HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+  curl -fsL "$MIRROR_RAW_GITHUB_URL/ohmyzsh/ohmyzsh/master/tools/install.sh" | \
+  sed 's/https:\/\/github.com/https:\/\/github.91chi.fun\/https:\/\/github.com/g' > omzinstall.sh
+  sh omzinstall.sh --unattended && \
+  git clone --depth=1 "$GITHUB_URL/romkatv/powerlevel10k.git" .oh-my-zsh/custom/themes/powerlevel10k
+  mv .zshrc .oh-my-zsh "$USER_HOME"
+  chown $name:wheel "$USER_HOME/.zshrc"
+  chown -R $name:wheel "$USER_HOME/.oh-my-zsh"
+  rm -rf omzinstall.sh
   # TODO: cp .zshrc .p10k-zsh
 }
 
