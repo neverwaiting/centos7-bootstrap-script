@@ -236,13 +236,6 @@ color_print "success" "####### Welcome to Wintersun's bootstrap! ########"
 color_print "success" "##################################################"
 color_print "success" "##################################################"
 
-### install wget net-tools zip python3 ctags
-detect_exec_and_install wget
-detect_exec_and_install ifconfig net-tools
-detect_exec_and_install zip
-detect_exec_and_install python3
-detect_exec_and_install ctags
-
 # comment to disable github proxy
 PROXY_GITHUB_URL="https://github.91chi.fun/https://github.com"
 GITHUB_URL="https://github.com"
@@ -260,16 +253,24 @@ color_print "warn" "Are you change yum source? yes(y)/no(n)"
 read is_change_yum_source
 [ "$is_change_yum_source" == "n" ] || yum_source_change || error_exit "change yum source"
 
+# install openssl-devel zlib-devel curl-devel python3
+yum install -y openssl-devel zlib-devel curl-devel autoconf boost-devel || error_exit "install some package with yum"
+
+### install git wget net-tools zip python3 ctags
+detect_exec_and_install git
+detect_exec_and_install wget
+detect_exec_and_install ifconfig net-tools
+detect_exec_and_install zip
+detect_exec_and_install python3
+detect_exec_and_install ctags
+
 add_resolve_github
 set_pipconf
 set_npmrc
 set_gitconfig
 
 # disable firewalld service
-systemctl stop firewalld || error_exit "disable firewalld"
-
-# install openssl-devel zlib-devel curl-devel python3
-yum install -y openssl-devel zlib-devel curl-devel autoconf boost-devel || error_exit "install some package with yum"
+systemctl stop firewalld
 
 nvim_install || error_exit "install nvim"
 
