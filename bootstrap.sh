@@ -297,7 +297,7 @@ zsh_install || error_exit "install zsh"
 END_TIME=$(date +%s)
 SPEND_TIME=`expr $END_TIME - $BEGIN_TIME`
 if [ $SPEND_TIME -ge 60 ]; then
-	SPEND_TIME_STRING=`expr $SPEND_TIME / 60` "m" `expr $SPEND_TIME % 60` "s"
+	SPEND_TIME_STRING="`expr $SPEND_TIME / 60` min `expr $SPEND_TIME % 60` sec"
 else
 	SPEND_TIME_STRING="$SPEND_TIME s"
 fi
