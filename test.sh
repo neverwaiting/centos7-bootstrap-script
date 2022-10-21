@@ -174,7 +174,7 @@ nvim_install()
   if [ ! -x "$(command -v nvim)" ]; then
     wget -O "$TMP_DIR/nvim-linux64.tar.gz" "$GITHUB_URL/neovim/neovim/releases/download/v0.8.0/nvim-linux64.tar.gz"
     tar -zxvf "$TMP_DIR/nvim-linux64.tar.gz" -C "$TMP_DIR"
-    cp -r "$TMP_DIR/nvim-linux64/*" /usr/local/
+    cp -r $TMP_DIR/nvim-linux64/* /usr/local/
     # pip3 install neovim --user "$name"
     echo "alias vim='nvim'" >> /etc/profile
   fi
@@ -187,7 +187,7 @@ node_install()
   if [ ! -x "$(command -v node)" ]; then
     wget -O "$TMP_DIR/node-v16.17.0-linux-x64.tar.xz" https://nodejs.org/dist/v16.17.0/node-v16.17.0-linux-x64.tar.xz
     tar -xvf "$TMP_DIR/node-v16.17.0-linux-x64.tar.xz" -C "$TMP_DIR"
-    cp -r "$TMP_DIR/node-v16.17.0-linux-x64/*" /usr/local/
+    cp -r $TMP_DIR/node-v16.17.0-linux-x64/* /usr/local/
 
   # npm install yarn -g
   # npm install neovim -g
