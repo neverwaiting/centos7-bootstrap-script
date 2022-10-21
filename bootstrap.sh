@@ -174,7 +174,7 @@ nvim_install()
 {
   [ -d "$TMP_DIR" ] || mkdir -p "$TMP_DIR"
   if [ ! -x "$(command -v nvim)" ]; then
-    wget -O "$TMP_DIR/nvim-linux64.tar.gz" "$GITHUB_URL/neovim/neovim/releases/download/v0.8.0/nvim-linux64.tar.gz"
+    wget -O "$TMP_DIR/nvim-linux64.tar.gz" "$GITHUB_URL/neovim/neovim/releases/download/v0.7.2/nvim-linux64.tar.gz"
     tar -zxvf "$TMP_DIR/nvim-linux64.tar.gz" -C "$TMP_DIR"
     cp -r $TMP_DIR/nvim-linux64/* /usr/local/
     pip3 install neovim --user "$name"
