@@ -16,7 +16,7 @@ color_print()
     "info") printf "\e[39m%s\e[0m\n" "$2"; ;;
     "warn") printf "\e[33m%s\e[0m\n" "$2" ;;
     "error") printf "\e[31m%s\e[0m\n" "$2" ;;
-    "success") printf "\e[92m%s\e[0m\n" "$2" ;;
+    "success") printf "\e[32m%s\e[0m\n" "$2" ;;
     *) echo "unkonw level, exit"; exit ;;
   esac
 }
