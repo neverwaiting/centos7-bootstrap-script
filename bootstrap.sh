@@ -204,7 +204,6 @@ devtoolset8_install()
     yum install -y devtoolset-8
     source /opt/rh/devtoolset-8/enable
     echo -e "\nsource /opt/rh/devtoolset-8/enable" >> /etc/profile
-    source /opt/rh/devtoolset-8/enable
   fi
 }
 
@@ -227,9 +226,7 @@ zsh_install()
   MIRROR_RAW_GITHUB_URL="https://github.91chi.fun/https://raw.github.com"
   curl -fsL "$MIRROR_RAW_GITHUB_URL/ohmyzsh/ohmyzsh/master/tools/install.sh" | \
   sed 's/https:\/\/github.com/https:\/\/github.91chi.fun\/https:\/\/github.com/g' > omzinstall.sh
-  sh omzinstall.sh --unattended && \
-  git clone --depth=1 "$GITHUB_URL/romkatv/powerlevel10k.git" .oh-my-zsh/custom/themes/powerlevel10k
-  sed -i 's/^ZSH_THEME=/ZSH_THEME="powerlevel10k/powerlevel10k"/' .zshrc
+  sh omzinstall.sh --unattended
   mv .zshrc .oh-my-zsh "$USER_HOME"
   chown $name:wheel "$USER_HOME/.zshrc"
   chown -R $name:wheel "$USER_HOME/.oh-my-zsh"
