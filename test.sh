@@ -53,11 +53,11 @@ create_user()
 {
   [ -x /bin/zsh ] || yum install -y zsh
   if [ ! -d "/home/$name" ]; then
-    useradd -m -g wheel -s /bin/zsh "$name" > /dev/null 2>$1
+    useradd -m -g wheel -s /bin/zsh "$name" > /dev/null 2>&1
     echo "$name:$password" | chpasswd
   fi
   echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/temp
-  chsh -s /bin/zsh "$name" > /dev/null 2>$1
+  chsh -s /bin/zsh "$name" > /dev/null 2>&1
 }
 
 # set static ip address
