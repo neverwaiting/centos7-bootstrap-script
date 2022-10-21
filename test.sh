@@ -165,6 +165,8 @@ set_gitconfig()
   git config --global init.defaultbranch "master"
   git config --global user.name $GIT_USER_NAME
   git config --global user.email $GIT_USER_EMAIL
+  mv .gitconfig "/home/$name"
+	chown "$name:wheel" "/home/$name/.gitconfig"
 }
 
 ### install neovim
@@ -231,7 +233,6 @@ zsh_install()
   chown $name:wheel "$USER_HOME/.zshrc"
   chown -R $name:wheel "$USER_HOME/.oh-my-zsh"
   rm -rf omzinstall.sh
-  # TODO: cp .zshrc .p10k-zsh
 }
 
 color_print "success" "##################################################"
@@ -239,6 +240,11 @@ color_print "success" "##################################################"
 color_print "success" "####### Welcome to Wintersun's bootstrap! ########"
 color_print "success" "##################################################"
 color_print "success" "##################################################"
+
+if [ $(whoami) != "root" ]; then
+	color_print "error" "Please make sure user is root!"
+	exit 1
+fi
 
 # comment to disable github proxy
 PROXY_GITHUB_URL="https://github.91chi.fun/https://github.com"
