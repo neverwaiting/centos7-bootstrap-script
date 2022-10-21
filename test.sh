@@ -239,7 +239,7 @@ color_print "success" "##################################################"
 # comment to disable github proxy
 PROXY_GITHUB_URL="https://github.91chi.fun/https://github.com"
 GITHUB_URL="https://github.com"
-[ -z "$PROXY_GITHUB_URL" ] || GITHUB="$PROXY_GITHUB_URL"
+[ -z "$PROXY_GITHUB_URL" ] || GITHUB_URL="$PROXY_GITHUB_URL"
 
 color_print "warn" "Are you change your ip address? yes(y)/no(n)"
 read is_change_ip_address
