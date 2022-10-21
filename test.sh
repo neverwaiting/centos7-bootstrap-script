@@ -49,6 +49,7 @@ detect_exec_and_install()
 # create a user
 create_user()
 {
+  [ -x /bin/zsh ] || yum install -y zsh
   useradd -m -g wheel -s /bin/zsh "$name" >/dev/null 2>$1
   echo "$name:$password" | chpasswd
   echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/temp
@@ -216,7 +217,6 @@ cmake_install()
 # install zsh with oh-my-zsh and powerlevel10k theme
 zsh_install()
 {
-  yum install -y zsh
   USER_HOME="/home/$name"
   MIRROR_RAW_GITHUB_URL="https://github.91chi.fun/https://raw.github.com"
   sudo -u "$name" curl -fsL "$MIRROR_RAW_GITHUB_URL/ohmyzsh/ohmyzsh/master/tools/install.sh" | \
