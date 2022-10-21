@@ -241,13 +241,13 @@ PROXY_GITHUB_URL="https://github.91chi.fun/https://github.com"
 GITHUB_URL="https://github.com"
 [ -z "$PROXY_GITHUB_URL" ] || GITHUB="$PROXY_GITHUB_URL"
 
-create_user || error_exit "create user"
-
 color_print "warn" "Are you change your ip address? yes(y)/no(n)"
 read is_change_ip_address
 [ "$is_change_ip_address" == "n" ] || set_static_ip_address || error_exit "set static ip address"
 
 maxfdlimit || error_exit "max fd limit"
+
+detect_exec_and_install wget
 
 color_print "warn" "Are you change yum source? yes(y)/no(n)"
 read is_change_yum_source
@@ -256,9 +256,10 @@ read is_change_yum_source
 # install openssl-devel zlib-devel curl-devel python3
 yum install -y openssl-devel zlib-devel curl-devel autoconf boost-devel || error_exit "install some package with yum"
 
+create_user || error_exit "create user"
+
 ### install git wget net-tools zip python3 ctags
 detect_exec_and_install git
-detect_exec_and_install wget
 detect_exec_and_install ifconfig net-tools
 detect_exec_and_install zip
 detect_exec_and_install python3
